@@ -3,6 +3,8 @@
 use strict;
 use warnings;
 
+use JSON;
+
 my $debug = 0;
 
 my $token_exprs = [
@@ -54,14 +56,9 @@ while( <> ){
     }
 }
 
-my $json_line = '[';
-foreach my $token ( @tokens ){
-    my ( $tag )   = keys %{ $token };
-    my ( $value ) = values %{ $token };
-    $json_line .= " \"$tag\": \"$value\",";
-}
-$json_line =~ s/,$//;
-$json_line .= ' ]';
+my $json_encoder = JSON->new->allow_nonref();
+my $json_line    = $json_encoder->encode( \@tokens );
+
 print( "$json_line\n" );
 
 sub debug {
